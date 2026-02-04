@@ -9,6 +9,16 @@ export class SheetsService {
   private spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
   constructor() {
+    console.log(
+      '🔑 Service Account Email:',
+      process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    );
+    console.log('📊 Sheet ID:', process.env.GOOGLE_SHEET_ID);
+    console.log(
+      '🔐 Private Key existe:',
+      !!process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
+    );
+
     const privateKey = Buffer.from(
       process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
       'base64',
@@ -26,27 +36,36 @@ export class SheetsService {
   }
 
   async addRow(data: CreateGuestDto): Promise<void> {
-    const values = [
-      [
-        `${data.firstName} ${data.lastName.toUpperCase()}`,
-        data.willAttend ? data.meal : '',
-        data.willAttend ? 'Oui' : 'Non',
-      ],
-      ...data.guestList.map((guest) => [
-        `${guest.firstName} ${guest.lastName.toUpperCase()}`,
-        guest.meal,
-        guest.willAttend ? 'Oui' : 'Non',
-      ]),
-    ];
+    try {
+      const values = [
+        [
+          `${data.firstName} ${data.lastName.toUpperCase()}`,
+          data.willAttend ? data.meal : '',
+          data.willAttend ? 'Oui' : 'Non',
+          data.numberOfGuests ?? 1,
+        ],
+        ...data.guestList.map((guest) => [
+          `${guest.firstName} ${guest.lastName.toUpperCase()}`,
+          guest.meal,
+          guest.willAttend ? 'Oui' : 'Non',
+        ]),
+      ];
 
-    await this.sheets.spreadsheets.values.append({
-      spreadsheetId: this.spreadsheetId,
-      range: 'A:D',
-      valueInputOption: 'USER_ENTERED',
-      requestBody: { values },
-    });
+      console.log("📝 Tentative d'écriture:", values);
+      console.log('📊 Sheet ID:', this.spreadsheetId);
 
-    console.log('✅ Ligne ajoutée au sheet');
+      await this.sheets.spreadsheets.values.append({
+        spreadsheetId: this.spreadsheetId,
+        range: 'A:D',
+        valueInputOption: 'USER_ENTERED',
+        requestBody: { values },
+      });
+
+      console.log('✅ Ligne ajoutée au sheet');
+    } catch (error) {
+      console.error('❌ Erreur Google Sheets:', error);
+      throw error;
+    }
   }
 
   async updateRow(rowIndex: number, data: UpdateGuestDto): Promise<void> {
