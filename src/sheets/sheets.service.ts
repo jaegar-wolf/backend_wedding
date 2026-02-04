@@ -9,20 +9,17 @@ export class SheetsService {
   private spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
   constructor() {
+    const privateKey = Buffer.from(
+      process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
+      'base64',
+    ).toString('utf-8');
+
     console.log(
       '🔑 Service Account Email:',
       process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
     );
     console.log('📊 Sheet ID:', process.env.GOOGLE_SHEET_ID);
-    console.log(
-      '🔐 Private Key existe:',
-      !!process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
-    );
-
-    const privateKey = Buffer.from(
-      process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
-      'base64',
-    ).toString('utf-8');
+    console.log('🔐 Private Key décodée:', privateKey ? 'OK' : 'ERREUR');
 
     const auth = new GoogleAuth({
       credentials: {
