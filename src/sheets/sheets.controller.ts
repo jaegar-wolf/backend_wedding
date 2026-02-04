@@ -1,4 +1,13 @@
-import { Controller, Post, Get, Put, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Put,
+  Body,
+  Param,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { SheetsService } from './sheets.service';
 import { CreateGuestDto, UpdateGuestDto } from 'src/dto/guest.dto';
 
@@ -13,7 +22,10 @@ export class SheetsController {
       await this.sheetsService.addRow(guestData);
       return { success: true, message: 'Invité ajouté au sheet' };
     } catch (error) {
-      return { success: false, error: error.message };
+      throw new HttpException(
+        { success: false, message: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
