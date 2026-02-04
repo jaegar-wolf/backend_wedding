@@ -9,13 +9,15 @@ export class SheetsService {
   private spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
   constructor() {
+    const privateKey = Buffer.from(
+      process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
+      'base64',
+    ).toString('utf-8');
+
     const auth = new GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(
-          /\\n/g,
-          '\n',
-        ),
+        private_key: privateKey,
       },
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
