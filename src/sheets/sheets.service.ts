@@ -14,13 +14,6 @@ export class SheetsService {
       'base64',
     ).toString('utf-8');
 
-    console.log(
-      '🔑 Service Account Email:',
-      process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    );
-    console.log('📊 Sheet ID:', process.env.GOOGLE_SHEET_ID);
-    console.log('🔐 Private Key décodée:', privateKey ? 'OK' : 'ERREUR');
-
     const auth = new GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
@@ -48,19 +41,14 @@ export class SheetsService {
         ]),
       ];
 
-      console.log("📝 Tentative d'écriture:", values);
-      console.log('📊 Sheet ID:', this.spreadsheetId);
-
       await this.sheets.spreadsheets.values.append({
         spreadsheetId: this.spreadsheetId,
         range: 'A:D',
         valueInputOption: 'USER_ENTERED',
         requestBody: { values },
       });
-
-      console.log('✅ Ligne ajoutée au sheet');
     } catch (error) {
-      console.error('❌ Erreur Google Sheets:', error);
+      console.error('❌ Erreur Google Sheets:', error.message);
       throw error;
     }
   }

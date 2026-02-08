@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  MariageApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'v3'
+      Handler: lambda.handler
+      Runtime: nodejs20.x
+      CodeUri: dist/bundle/
+      MemorySize: 256
+      Architectures:
+        - arm64
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        Root:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: ANY
+      Environment:
+        Variables:
+          NODE_ENV: production
+          GOOGLE_SHEET_ID: '{{resolve:ssm:/mariage/GOOGLE_SHEET_ID}}'
+          GOOGLE_SERVICE_ACCOUNT_EMAIL: '{{resolve:ssm:/mariage/GOOGLE_SERVICE_ACCOUNT_EMAIL}}'
+          GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: '{{resolve:secretsmanager:mariage/google-private-key}}'
+      Policies:
+        - SSMParameterReadPolicy:
+            ParameterName: mariage/*
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource: !Sub 'arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:mariage/google-private-key-*'
+
+Outputs:
+  ApiUrl:
+    Value: !Sub 'https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com'

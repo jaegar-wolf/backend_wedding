@@ -41,3 +41,5 @@ sheet-service.json
 *.env
 .env
 oauth-tokens.json
+.aws-sam
+samconfig.toml
