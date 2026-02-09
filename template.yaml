@@ -8,9 +8,9 @@ Resources:
   MariageApi:
     Type: AWS::Serverless::Function
     Properties:
-      Description: 'v3'
+      Description: 'v4'
       Handler: lambda.handler
-      Runtime: nodejs20.x
+      Runtime: nodejs22.x
       CodeUri: dist/bundle/
       MemorySize: 256
       Architectures:

@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "build:lambda": "nest build && esbuild dist/lambda.js --bundle --platform=node --target=node20 --outfile=dist/bundle/lambda.js --external:@nestjs/microservices --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:@nestjs/microservices/microservices-module --external:cache-manager",
+    "build:lambda": "nest build && esbuild dist/lambda.js --bundle --platform=node --target=node22 --outfile=dist/bundle/lambda.js --external:@nestjs/microservices --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:@nestjs/microservices/microservices-module --external:cache-manager",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
