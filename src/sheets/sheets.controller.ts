@@ -9,7 +9,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { SheetsService } from './sheets.service';
-import { CreateGuestDto, UpdateGuestDto } from 'src/dto/guest.dto';
+import { CreateGuestDto, UpdateGuestDto } from '../dto/guest.dto';
 
 @Controller('sheets')
 export class SheetsController {

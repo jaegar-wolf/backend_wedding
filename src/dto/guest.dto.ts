@@ -5,14 +5,17 @@ import {
   IsArray,
   ValidateNested,
   IsOptional,
+  IsNotEmpty,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class GuestItemDto {
   @IsString()
+  @IsNotEmpty()
   firstName: string;
 
   @IsString()
+  @IsNotEmpty()
   lastName: string;
 
   @IsString()
@@ -24,9 +27,11 @@ export class GuestItemDto {
 
 export class CreateGuestDto {
   @IsString()
+  @IsNotEmpty()
   firstName: string;
 
   @IsString()
+  @IsNotEmpty()
   lastName: string;
 
   @IsString()
@@ -47,10 +52,12 @@ export class CreateGuestDto {
 export class UpdateGuestDto {
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   firstName?: string;
 
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   lastName?: string;
 
   @IsOptional()
